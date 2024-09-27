@@ -6,6 +6,41 @@ namespace Matice_Test
 {
     class Program
     {
+        static int[,] NasobeniMatic(int[,] matrixA, int[,] matrixB) 
+        {
+            int rowsA = matrixA.GetLength(0);
+            int colsA = matrixA.GetLength(1);
+            int rowsB = matrixB.GetLength(0);
+            int colsB = matrixB.GetLength(1);
+            
+            int[,] resultMatrix = new int[rowsA, colsB];
+
+            
+            for (int i = 0; i < rowsA; i++)
+            {
+                for (int j = 0; j < colsB; j++)
+                {
+                    resultMatrix[i, j] = 0;
+                    for (int k = 0; k < colsA; k++)
+                    {
+                        resultMatrix[i, j] += matrixA[i, k] * matrixB[k, j];
+                    }
+                }
+            }
+
+            return resultMatrix;
+        }
+        static bool OverNasobeni(int[,] skibidi, int[,] skibidi2)
+        {
+            if (skibidi.GetLength(1) == skibidi2.GetLength(0))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         static int[,] Transponuj(int[,] input)
         {
             int[,] output = new int[input.GetLength(1), input.GetLength(0)];
@@ -30,7 +65,7 @@ namespace Matice_Test
             }
             return output;
         }
-        static int[,] secti_nebo_odecti_pole(int[,] skibidi, int[,] skibidi2, bool soucet)
+        static int[,] secti_nebo_odecti_pole(int[,] skibidi, int[,] skibidi2, bool soucet, bool prohozeni = false)
         {
 
             
@@ -45,13 +80,23 @@ namespace Matice_Test
                     }
                 }
             }
-            else
+            else if(prohozeni == false)
             {
                 for (int i = 0; i < vysledek.GetLength(0); i++)
                 {
                     for (int j = 0; j < vysledek.GetLength(1); j++)
                     {
                         vysledek[i, j] = skibidi[i, j] - skibidi2[i, j];
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < vysledek.GetLength(0); i++)
+                {
+                    for (int j = 0; j < vysledek.GetLength(1); j++)
+                    {
+                        vysledek[i, j] = skibidi2[i, j] - skibidi[i, j];
                     }
                 }
             }
@@ -210,6 +255,7 @@ namespace Matice_Test
             int[,] matice_vysledek;
             int[,] matice;
             int[,] matice2;
+            bool prohozeni;
             Console.WriteLine("Rozdíl \n Zmáčkni cokoliv pro pokračování");
             Console.ReadKey();
             do
@@ -224,6 +270,15 @@ namespace Matice_Test
                 matice2 = NactiCisly();
                 opakovani = OvereniSuma(matice, matice2);
             } while (opakovani);
+            Console.WriteLine("Zvolte: \n 1 - matice1 - matice2 \n2 - matice2 - matice1");
+            if (Convert.ToInt32(Console.ReadLine()) == 1)
+            {
+                prohozeni = false;
+            }
+            else
+            {
+                prohozeni = true;
+            }
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("První matice:");
             vypis(matice);
@@ -233,13 +288,49 @@ namespace Matice_Test
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Stiskni pro pokracovani");
             Console.ReadKey();
-            matice_vysledek = secti_nebo_odecti_pole(matice, matice2,false);
+            matice_vysledek = secti_nebo_odecti_pole(matice, matice2,false, prohozeni);
             Console.WriteLine("Vysledek je:\n______________________________________________________");
             vypis(matice_vysledek);
             Console.WriteLine("Stiskni pro pokracovani");
             Console.ReadKey();
             Console.WriteLine("___________________________________________________________________ \n \n");
 
+        }
+        static void NasobitMatky()
+        {
+            bool opakovani;
+            int[,] matice_vysledek;
+            int[,] matice;
+            int[,] matice2;
+            Console.WriteLine("Nasobení dvou matic \n Zmáčkni cokoliv pro pokračování");
+            Console.ReadKey();
+            do
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("První matice:");
+                Console.ForegroundColor = ConsoleColor.White;
+                matice = NactiCisly();
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("______________________________________________________\nDruhá matice:");
+                Console.ForegroundColor = ConsoleColor.White;
+                matice2 = NactiCisly();
+                opakovani = OverNasobeni(matice, matice2);
+            } while (opakovani);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("První matice:");
+            vypis(matice);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Druhá matice:");
+            vypis(matice2);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Stiskni pro pokracovani");
+            Console.ReadKey();
+            matice_vysledek = NasobeniMatic(matice, matice2);
+            Console.WriteLine("Vysledek je:\n______________________________________________________");
+            vypis(matice_vysledek);
+            Console.WriteLine("Stiskni pro pokracovani");
+            Console.ReadKey();
+            Console.WriteLine("___________________________________________________________________ \n \n");
         }
         static void Main(string[] args)
         {
@@ -249,27 +340,41 @@ namespace Matice_Test
             Console.WriteLine("Calculator matic 3000");
             while(true)
             {
-                operace = Nabidka();
-                switch (operace)
+                try
                 {
-                    case 0: Vypnout();
-                        break;
-                    case 1:
-                        Soucet();
-                        break;
-                    case 2:
-                        Rozdil();
-                        break;
-                    case 3:
-                        Transponace();
-                        break;
-                    case 4:
-                        Nasobeni();
-                        break;
-                    default:
-                        Console.WriteLine("Asi si zmackl neco co si nemel, dej si to znova :)");
-                        break;
+                    operace = Nabidka();
+                    switch (operace)
+                    {
+                        case 0:
+                            Vypnout();
+                            break;
+                        case 1:
+                            Soucet();
+                            break;
+                        case 2:
+                            Rozdil();
+                            break;
+                        case 3:
+                            Transponace();
+                            break;
+                        case 4:
+                            Nasobeni();
+                            break;
+                        case 5:
+                            NasobitMatky();
+                            break;
+                        default:
+                            Console.WriteLine("Asi si zmackl neco co si nemel, dej si to znova :)");
+                            break;
+                    }
                 }
+                catch (Exception)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Něco se nepovedlo nebo invalidní input");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                
 
 
             }
