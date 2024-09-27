@@ -1,9 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Matice_Test
 {
     class Program
     {
+        static int[,] Transponuj(int[,] input)
+        {
+            int[,] output = new int[input.GetLength(1), input.GetLength(0)];
+            for (int i = 0; i < output.GetLength(0); i++)
+            {
+                for (int j = 0; j < output.GetLength(1); j++)
+                {
+                    output[i, j] = input[j, i];
+                }
+            }
+            return output;
+        }
+        static int[,] NasobJednimCislem(int[,] input, int nasobitel)
+        {
+            int[,] output = new int[input.GetLength(0), input.GetLength(1)];
+            for (int i = 0; i < input.GetLength(0); i++)
+            {
+                for (int j = 0; j < input.GetLength(1); j++)
+                {
+                    output[i,j] = input[j, i] * nasobitel;
+                }
+            }
+            return output;
+        }
         static int[,] secti_nebo_odecti_pole(int[,] skibidi, int[,] skibidi2, bool soucet)
         {
 
@@ -100,13 +126,29 @@ namespace Matice_Test
                 Console.WriteLine();
             }
         }
+        static void Transponace()
+        {
+            Console.WriteLine("Transponace \nZmáčkni cokoliv pro pokračování ");
+            Console.ReadKey();
+            int[,] matice = NactiCisly();
+            Console.WriteLine("Matice:");
+            vypis(matice);
+            Console.WriteLine("Zmáčkni cokoliv pro pokračování ");
+            Console.ReadKey();
+            Console.WriteLine("Výsledek: \n ___________________________________________");
+            int[,] matice_vysledek = Transponuj(matice);
+            vypis(matice_vysledek);
+            Console.WriteLine("Zmáčkni cokoliv pro pokračování ");
+            Console.ReadKey();
+            Console.WriteLine("___________________________________________________________________ \n \n");
+        }
         static void Soucet()
         {
             bool opakovani;
             int[,] matice_vysledek;
             int[,] matice;
             int[,] matice2;
-            Console.WriteLine("Součet \n Zmáčkni cokoliv pro pokračování");
+            Console.WriteLine("Součet \nZmáčkni cokoliv pro pokračování");
             Console.ReadKey();
             do
             {
@@ -135,6 +177,31 @@ namespace Matice_Test
             Console.WriteLine("Stiskni pro pokracovani");
             Console.ReadKey();
             Console.WriteLine("___________________________________________________________________ \n \n");
+
+        }
+        static void Nasobeni()
+        {
+            int[,] matice;
+            Console.WriteLine("Nasobení jedním číslem \nZmáčkni cokoliv pro pokračování");
+            Console.ReadKey();
+            matice = NactiCisly();
+            Console.WriteLine("Cislo kterym chcete nasobit:");
+            int nasobitel = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("______________________________");
+            vypis(matice);
+            Console.ForegroundColor= ConsoleColor.Green;
+            Console.WriteLine($"Nasobitel je: {nasobitel}");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Zmáčkni cokoliv pro pokračování\n");
+            Console.ReadKey();
+            int[,] matice_vysledek = NasobJednimCislem(matice, nasobitel);
+            Console.WriteLine("Výsledek: \n ___________________________");
+            vypis(matice_vysledek);
+            Console.WriteLine("Zmáčkni cokoliv pro pokračování\n");
+            Console.ReadKey();
+            Console.WriteLine("___________________________");
+
+
 
         }
         static void Rozdil()
@@ -193,7 +260,12 @@ namespace Matice_Test
                     case 2:
                         Rozdil();
                         break;
-
+                    case 3:
+                        Transponace();
+                        break;
+                    case 4:
+                        Nasobeni();
+                        break;
                     default:
                         Console.WriteLine("Asi si zmackl neco co si nemel, dej si to znova :)");
                         break;
