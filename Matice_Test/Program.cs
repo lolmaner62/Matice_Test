@@ -69,7 +69,7 @@ namespace Matice_Test
         {
 
             
-            int[,] vysledek = new int[skibidi.GetLength(0), skibidi.GetLength(0)];
+            int[,] vysledek = new int[skibidi.GetLength(0), skibidi.GetLength(1)];
             if (soucet)
             {
                 for (int i = 0; i < vysledek.GetLength(0); i++)
