@@ -38,6 +38,9 @@ namespace Matice_Test
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Počet sloupců první matice musí být roven počtu řádků druhé matice");
+                Console.ForegroundColor = ConsoleColor.White;
                 return true;
             }
         }
@@ -108,7 +111,9 @@ namespace Matice_Test
             {
                 return false;
             }
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Pocet sloupcu a radku musí být v obou maticich stejný, zadejte znovu matice:");
+            Console.ForegroundColor = ConsoleColor.White;
             return true;
         }
         static int[,] NactiCisly()
@@ -156,7 +161,9 @@ namespace Matice_Test
         }
         static void Vypnout()
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Vypínání");
+            Console.ForegroundColor = ConsoleColor.White;
             Environment.Exit(0);
         }
         static void vypis(int[,] skibidi)
