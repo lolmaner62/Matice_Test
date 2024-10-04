@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-
+using Matice_Test.Classes;
 namespace Matice_Test
 {
     class Program
     {
+        static List<Matice> Stare = new List<Matice>();
         static int[,] NasobeniMatic(int[,] matrixA, int[,] matrixB) 
         {
             int rowsA = matrixA.GetLength(0);
             int colsA = matrixA.GetLength(1);
             int rowsB = matrixB.GetLength(0);
             int colsB = matrixB.GetLength(1);
-            
             int[,] resultMatrix = new int[rowsA, colsB];
-
             
             for (int i = 0; i < rowsA; i++)
             {
@@ -153,9 +152,32 @@ namespace Matice_Test
             return skibidi;
 
         }
+        static void VypisStare()
+        {
+            if (Stare.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Zatím žádné uložené výsledky");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("Zmackni cokoliv pro pokracovani");
+                Console.ReadKey();
+                return;
+            }
+            Console.WriteLine("Vypsaní starých výsledků \nzmackni cokoliv pro pokracovani");
+            Console.ReadKey();
+            for (int i = 0; i < Stare.Count; i++)
+            {
+                var item = Stare[i];
+                Console.WriteLine($"{i + 1}: {item.operace}: ");
+                vypis(item.matice);
+                Console.WriteLine("_______________________________________________________________");
+            }
+            Console.WriteLine("zmackni cokoliv pro pokracovani");
+            Console.ReadKey();
+        }
         static int Nabidka()
         {
-            Console.WriteLine("Vyber operaci: \n 0 - Opustit \n 1 - Suma \n 2 - Rozdíl \n 3 - Transponace \n 4 - Vynásobení jedním číslem \n 5 - Násobení matic");
+            Console.WriteLine("Vyber operaci: \n 0 - Opustit \n 1 - Suma \n 2 - Rozdíl \n 3 - Transponace \n 4 - Vynásobení jedním číslem \n 5 - Násobení matic \n 6 - Vypsání doposud vypočítaných matic");
             int navratova = Convert.ToInt32(Console.ReadLine());
             return navratova;
         }
@@ -189,6 +211,7 @@ namespace Matice_Test
             Console.ReadKey();
             Console.WriteLine("Výsledek: \n ___________________________________________");
             int[,] matice_vysledek = Transponuj(matice);
+            Stare.Add(new Matice(matice_vysledek, "Transponace"));
             vypis(matice_vysledek);
             Console.WriteLine("Zmáčkni cokoliv pro pokračování ");
             Console.ReadKey();
@@ -224,6 +247,7 @@ namespace Matice_Test
             Console.WriteLine("Stiskni pro pokracovani");
             Console.ReadKey();
             matice_vysledek = secti_nebo_odecti_pole(matice, matice2,true);
+            Stare.Add(new Matice(matice_vysledek, "Soucet"));
             Console.WriteLine("Vysledek je:\n______________________________________________________");
             vypis(matice_vysledek);
             Console.WriteLine("Stiskni pro pokracovani");
@@ -247,6 +271,7 @@ namespace Matice_Test
             Console.WriteLine("Zmáčkni cokoliv pro pokračování\n");
             Console.ReadKey();
             int[,] matice_vysledek = NasobJednimCislem(matice, nasobitel);
+            Stare.Add(new Matice(matice_vysledek, "Nasobeni jedním číslem"));
             Console.WriteLine("Výsledek: \n ___________________________");
             vypis(matice_vysledek);
             Console.WriteLine("Zmáčkni cokoliv pro pokračování\n");
@@ -296,6 +321,7 @@ namespace Matice_Test
             Console.WriteLine("Stiskni pro pokracovani");
             Console.ReadKey();
             matice_vysledek = secti_nebo_odecti_pole(matice, matice2,false, prohozeni);
+            Stare.Add(new Matice(matice_vysledek, "Rozdíl"));
             Console.WriteLine("Vysledek je:\n______________________________________________________");
             vypis(matice_vysledek);
             Console.WriteLine("Stiskni pro pokracovani");
@@ -333,6 +359,7 @@ namespace Matice_Test
             Console.WriteLine("Stiskni pro pokracovani");
             Console.ReadKey();
             matice_vysledek = NasobeniMatic(matice, matice2);
+            Stare.Add(new Matice(matice_vysledek, "Nasobení"));
             Console.WriteLine("Vysledek je:\n______________________________________________________");
             vypis(matice_vysledek);
             Console.WriteLine("Stiskni pro pokracovani");
@@ -369,6 +396,9 @@ namespace Matice_Test
                             break;
                         case 5:
                             NasobitMatky();
+                            break;
+                        case 6:
+                            VypisStare();
                             break;
                         default:
                             Console.WriteLine("Asi si zmackl neco co si nemel, dej si to znova :)");
